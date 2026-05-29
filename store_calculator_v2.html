@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>店面坪數機台換算器 v2</title>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "PingFang TC", "Microsoft JhengHei", "Helvetica Neue", Arial, sans-serif;
+  background: #F5F4EF;
+  color: #2C2C2A;
+  line-height: 1.6;
+  padding: 20px;
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.title {
+  font-size: 22px;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.subtitle {
+  font-size: 13px;
+  color: #5F5E5A;
+}
+
+.card {
+  background: #FFFFFF;
+  border: 0.5px solid rgba(0,0,0,0.15);
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 0.5px solid rgba(0,0,0,0.1);
+}
+
+.slider-group {
+  margin-bottom: 16px;
+}
+
+.slider-label {
+  font-size: 13px;
+  color: #5F5E5A;
+  margin-bottom: 6px;
+}
+
+.slider-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.slider-row input[type="range"] {
+  flex: 1;
+  height: 4px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: #D3D1C7;
+  border-radius: 2px;
+  outline: none;
+}
+
+.slider-row input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #185FA5;
+  cursor: pointer;
+}
+
+.slider-row input[type="range"]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #185FA5;
+  cursor: pointer;
+  border: 0;
+}
+
+.slider-value {
+  font-size: 16px;
+  font-weight: 500;
+  min-width: 90px;
+  text-align: right;
+}
+
+.price-input-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.price-input-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.price-input-label {
+  font-size: 12px;
+  color: #5F5E5A;
+  margin-bottom: 4px;
+}
+
+.price-input-wrapper {
+  display: flex;
+  align-items: center;
+  background: #F5F4EF;
+  border-radius: 6px;
+  padding: 0 12px;
+  border: 0.5px solid rgba(0,0,0,0.1);
+}
+
+.price-input-prefix {
+  font-size: 13px;
+  color: #5F5E5A;
+  margin-right: 6px;
+}
+
+.price-input-wrapper input {
+  flex: 1;
+  border: 0;
+  background: transparent;
+  padding: 10px 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: #2C2C2A;
+  font-family: inherit;
+  width: 100%;
+  outline: none;
+}
+
+.price-input-suffix {
+  font-size: 12px;
+  color: #5F5E5A;
+}
+
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.metric {
+  background: #F5F4EF;
+  border-radius: 8px;
+  padding: 14px;
+}
+
+.metric-label {
+  font-size: 12px;
+  color: #5F5E5A;
+  margin-bottom: 4px;
+}
+
+.metric-value {
+  font-size: 22px;
+  font-weight: 500;
+}
+
+.metric-value.highlight {
+  color: #185FA5;
+}
+
+.status {
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-bottom: 16px;
+  background: #E6F1FB;
+  color: #0C447C;
+}
+
+.status.warning {
+  background: #FAEEDA;
+  color: #633806;
+}
+
+.revenue-card {
+  background: #F5F4EF;
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin-bottom: 16px;
+}
+
+.revenue-title {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+
+.revenue-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  font-size: 13px;
+}
+
+.revenue-item p:first-child {
+  color: #5F5E5A;
+  margin: 0;
+}
+
+.revenue-item p:last-child {
+  font-weight: 500;
+  margin: 2px 0 0;
+}
+
+.revenue-total {
+  border-top: 0.5px solid rgba(0,0,0,0.15);
+  margin-top: 12px;
+  padding-top: 12px;
+}
+
+.revenue-total-label {
+  color: #5F5E5A;
+  font-size: 13px;
+  margin: 0;
+}
+
+.revenue-total-value {
+  font-size: 20px;
+  font-weight: 500;
+  margin: 2px 0 0;
+  color: #185FA5;
+}
+
+.layout-container {
+  background: #FAFAF8;
+  border: 1.5px solid #444441;
+  border-radius: 4px;
+  padding: 16px;
+  margin-bottom: 16px;
+  overflow-x: auto;
+  background-image:
+    linear-gradient(45deg, #E8E6DE 25%, transparent 25%),
+    linear-gradient(-45deg, #E8E6DE 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #E8E6DE 75%),
+    linear-gradient(-45deg, transparent 75%, #E8E6DE 75%);
+  background-size: 20px 20px;
+  background-position: 0 0, 0 10px, 10px -10px, 10px 0px;
+}
+
+.layout-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.formula-box {
+  background: #F5F4EF;
+  border-radius: 8px;
+  padding: 14px 18px;
+  font-size: 12px;
+  color: #5F5E5A;
+  line-height: 1.7;
+}
+
+.formula-box .formula-title {
+  font-weight: 500;
+  color: #2C2C2A;
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+.preset-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.preset-buttons button {
+  flex: 1;
+  min-width: 110px;
+  background: #FFFFFF;
+  border: 0.5px solid rgba(0,0,0,0.2);
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 13px;
+  color: #2C2C2A;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.preset-buttons button:hover {
+  background: #F5F4EF;
+}
+
+.preset-buttons button.active {
+  background: #E6F1FB;
+  border-color: #185FA5;
+  color: #0C447C;
+}
+
+.footer {
+  text-align: center;
+  font-size: 12px;
+  color: #888780;
+  margin-top: 24px;
+}
+
+@media (prefers-color-scheme: dark) {
+  body { background: #1A1A18; color: #E8E6DE; }
+  .card { background: #2C2C2A; border-color: rgba(255,255,255,0.1); }
+  .section-title { border-bottom-color: rgba(255,255,255,0.1); }
+  .metric, .revenue-card, .formula-box, .price-input-wrapper { background: #1A1A18; }
+  .metric-label, .revenue-item p:first-child, .revenue-total-label, .formula-box, .subtitle, .footer, .price-input-label, .price-input-prefix, .price-input-suffix { color: #B4B2A9; }
+  .metric-value.highlight, .revenue-total-value { color: #85B7EB; }
+  .status { background: #042C53; color: #B5D4F4; }
+  .status.warning { background: #412402; color: #FAC775; }
+  .revenue-total { border-top-color: rgba(255,255,255,0.1); }
+  .price-input-wrapper { border-color: rgba(255,255,255,0.1); }
+  .price-input-wrapper input { color: #E8E6DE; }
+  .formula-box .formula-title { color: #E8E6DE; }
+  .preset-buttons button { background: #2C2C2A; border-color: rgba(255,255,255,0.2); color: #E8E6DE; }
+  .preset-buttons button:hover { background: #1A1A18; }
+  .preset-buttons button.active { background: #042C53; border-color: #378ADD; color: #B5D4F4; }
+  .slider-row input[type="range"] { background: #5F5E5A; }
+  .slider-row input[type="range"]::-webkit-slider-thumb { background: #378ADD; }
+  .slider-row input[type="range"]::-moz-range-thumb { background: #378ADD; }
+  .layout-container {
+    background: #2C2C2A;
+    border-color: #888780;
+    background-image:
+      linear-gradient(45deg, #1A1A18 25%, transparent 25%),
+      linear-gradient(-45deg, #1A1A18 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, #1A1A18 75%),
+      linear-gradient(-45deg, transparent 75%, #1A1A18 75%);
+  }
+}
+
+@media (max-width: 480px) {
+  body { padding: 12px; }
+  .card { padding: 14px; }
+  .title { font-size: 18px; }
+  .metric-value { font-size: 18px; }
+  .price-input-row { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h1 class="title">店面坪數機台換算器</h1>
+    <p class="subtitle">夾娃娃機 4 排背對背配置 · 飛絡力標準台 M (80.2 × 87cm)</p>
+  </div>
+
+  <div class="card">
+    <p class="section-title">店面尺寸</p>
+
+    <div class="preset-buttons">
+      <button onclick="setPreset(600, 600)" data-preset="600x600">600 × 600</button>
+      <button onclick="setPreset(600, 700)" data-preset="600x700">600 × 700</button>
+      <button onclick="setPreset(600, 800)" data-preset="600x800">600 × 800</button>
+      <button onclick="setPreset(900, 800)" data-preset="900x800">900 × 800</button>
+    </div>
+
+    <div class="slider-group">
+      <p class="slider-label">店面寬度 (W) — 與大門平行</p>
+      <div class="slider-row">
+        <input type="range" id="w-slider" min="200" max="1500" value="600" step="10">
+        <span class="slider-value" id="w-value">600 cm</span>
+      </div>
+    </div>
+
+    <div class="slider-group">
+      <p class="slider-label">店面深度 (D) — 機台排列方向</p>
+      <div class="slider-row">
+        <input type="range" id="d-slider" min="400" max="1500" value="600" step="10">
+        <span class="slider-value" id="d-value">600 cm</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="section-title">月租金設定</p>
+
+    <div class="price-input-row">
+      <div class="price-input-group">
+        <p class="price-input-label">入口優位 (每排第 1 台)</p>
+        <div class="price-input-wrapper">
+          <span class="price-input-prefix">NT$</span>
+          <input type="number" id="entry-price" value="6300" min="0" step="100">
+          <span class="price-input-suffix">/月</span>
+        </div>
+      </div>
+      <div class="price-input-group">
+        <p class="price-input-label">一般位置</p>
+        <div class="price-input-wrapper">
+          <span class="price-input-prefix">NT$</span>
+          <input type="number" id="normal-price" value="5800" min="0" step="100">
+          <span class="price-input-suffix">/月</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="section-title">電費設定</p>
+
+    <div class="slider-group">
+      <p class="slider-label">每台機台平均耗電（24h 含待機 + 運轉）</p>
+      <div class="slider-row">
+        <input type="range" id="watts-slider" min="80" max="300" value="130" step="10">
+        <span class="slider-value" id="watts-value">130 W</span>
+      </div>
+    </div>
+
+    <p class="section-title" style="margin-top: 16px;">冷氣設定</p>
+
+    <div class="slider-group">
+      <p class="slider-label">冷氣台數</p>
+      <div class="slider-row">
+        <input type="range" id="ac-count-slider" min="0" max="5" value="2" step="1">
+        <span class="slider-value" id="ac-count-value">2 台</span>
+      </div>
+    </div>
+
+    <div class="slider-group">
+      <p class="slider-label">每台冷氣 24h 平均耗電（變頻會自動降載）</p>
+      <div class="slider-row">
+        <input type="range" id="ac-watts-slider" min="500" max="2000" value="900" step="50">
+        <span class="slider-value" id="ac-watts-value">900 W</span>
+      </div>
+    </div>
+
+    <div class="slider-group">
+      <p class="slider-label">夏季每日運轉時數</p>
+      <div class="slider-row">
+        <input type="range" id="ac-summer-hours-slider" min="0" max="24" value="24" step="1">
+        <span class="slider-value" id="ac-summer-hours-value">24 h</span>
+      </div>
+    </div>
+
+    <div class="slider-group">
+      <p class="slider-label">過渡期每日運轉時數（5、10 月）</p>
+      <div class="slider-row">
+        <input type="range" id="ac-mid-hours-slider" min="0" max="24" value="12" step="1">
+        <span class="slider-value" id="ac-mid-hours-value">12 h</span>
+      </div>
+    </div>
+
+    <div class="slider-group">
+      <p class="slider-label">冬季每日運轉時數（11-4 月）</p>
+      <div class="slider-row">
+        <input type="range" id="ac-winter-hours-slider" min="0" max="24" value="0" step="1">
+        <span class="slider-value" id="ac-winter-hours-value">0 h</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="section-title">配置結果</p>
+
+    <div class="metrics">
+      <div class="metric">
+        <p class="metric-label">坪數</p>
+        <p class="metric-value" id="ping">10.9 坪</p>
+      </div>
+      <div class="metric">
+        <p class="metric-label">可擺排數</p>
+        <p class="metric-value" id="rows">4 排</p>
+      </div>
+      <div class="metric">
+        <p class="metric-label">每排台數</p>
+        <p class="metric-value" id="per-row">6 台</p>
+      </div>
+      <div class="metric">
+        <p class="metric-label">總台數</p>
+        <p class="metric-value highlight" id="total">24 台</p>
+      </div>
+    </div>
+
+    <div class="status" id="status">4 排背對背 (左 + 中背對背 + 右)</div>
+
+    <div class="revenue-card">
+      <p class="revenue-title">滿租月租金試算</p>
+      <div class="revenue-grid">
+        <div class="revenue-item">
+          <p id="entry-label">入口優位 4 台 × 6,300</p>
+          <p id="entry-revenue">NT$ 25,200</p>
+        </div>
+        <div class="revenue-item">
+          <p id="normal-label">一般 20 台 × 5,800</p>
+          <p id="normal-revenue">NT$ 116,000</p>
+        </div>
+      </div>
+      <div class="revenue-total">
+        <p class="revenue-total-label">滿租月收入</p>
+        <p class="revenue-total-value" id="total-revenue">NT$ 141,200</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="section-title">電費試算（機台 + 冷氣）</p>
+
+    <div class="metrics">
+      <div class="metric">
+        <p class="metric-label">機台月用電</p>
+        <p class="metric-value" id="kwh-machines">2,246</p>
+        <p class="metric-label" style="margin: 4px 0 0;">度/月</p>
+      </div>
+      <div class="metric">
+        <p class="metric-label">冷氣夏月用電</p>
+        <p class="metric-value" id="kwh-ac-summer">1,296</p>
+        <p class="metric-label" style="margin: 4px 0 0;">度/月</p>
+      </div>
+      <div class="metric">
+        <p class="metric-label">夏月總用電</p>
+        <p class="metric-value highlight" id="kwh-summer-total">3,542</p>
+        <p class="metric-label" style="margin: 4px 0 0;">度/月</p>
+      </div>
+    </div>
+
+    <div class="revenue-card">
+      <p class="revenue-title">兩種電價方案年費比較（含冷氣）</p>
+      <div class="revenue-grid">
+        <div class="revenue-item">
+          <p>累進電價（預設）</p>
+          <p id="annual-progressive">NT$ --</p>
+        </div>
+        <div class="revenue-item">
+          <p>時間電價（建議）</p>
+          <p id="annual-time" style="color: #185FA5;">NT$ --</p>
+        </div>
+      </div>
+      <div class="revenue-total">
+        <p class="revenue-total-label">時間電價年省金額</p>
+        <p class="revenue-total-value" id="annual-saving">NT$ --</p>
+      </div>
+    </div>
+
+    <div class="revenue-card" style="margin-top: 12px;">
+      <p class="revenue-title">月電費明細（時間電價）</p>
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; font-size: 13px;">
+        <div class="revenue-item">
+          <p>夏月（6-9 月）</p>
+          <p id="monthly-summer">NT$ --</p>
+        </div>
+        <div class="revenue-item">
+          <p>過渡（5、10 月）</p>
+          <p id="monthly-mid">NT$ --</p>
+        </div>
+        <div class="revenue-item">
+          <p>冬季（11-4 月）</p>
+          <p id="monthly-winter">NT$ --</p>
+        </div>
+      </div>
+      <div class="revenue-total">
+        <p class="revenue-total-label">全年平均月電費</p>
+        <p class="revenue-total-value" id="monthly-avg">NT$ --</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="section-title">平面配置圖（依輸入尺寸即時繪製）</p>
+    <div class="layout-container">
+      <svg id="layout-svg" class="layout-svg" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg"></svg>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="formula-box">
+      <p class="formula-title">公式說明</p>
+      <p><strong>排數判定 (依寬度 W)：</strong></p>
+      <p>W ≥ 1093 → 8 排 · W ≥ 822 → 6 排</p>
+      <p>W ≥ 548 → 4 排 · W ≥ 366 → 2 排 · W ≥ 184 → 1 排</p>
+      <p style="margin-top: 8px;"><strong>每排台數：</strong>⌊ (D − 85) ÷ 80.2 ⌋</p>
+      <p><strong>入口優位：</strong>每排第 1 台（靠近大門）</p>
+      <p style="margin-top: 8px;"><strong>電費計算（24h 營業）：</strong></p>
+      <p>月用電 = 台數 × 瓦數 × 24h × 30 ÷ 1000</p>
+      <p>累進電價：2.71-7.18 元/度（依級距累進）</p>
+      <p>時間電價：尖峰 4.57 + 離峰 1.80 元/度 + 75 元基本費</p>
+      <p>時段分佈：尖峰 44.6% / 離峰 55.4%（24h 營業）</p>
+    </div>
+  </div>
+
+  <p class="footer">v5.1 · 麥香砸摳商行 · 2026/5</p>
+</div>
+
+<script>
+const wSlider = document.getElementById('w-slider');
+const dSlider = document.getElementById('d-slider');
+const wattsSlider = document.getElementById('watts-slider');
+const acCountSlider = document.getElementById('ac-count-slider');
+const acWattsSlider = document.getElementById('ac-watts-slider');
+const acSummerHoursSlider = document.getElementById('ac-summer-hours-slider');
+const acMidHoursSlider = document.getElementById('ac-mid-hours-slider');
+const acWinterHoursSlider = document.getElementById('ac-winter-hours-slider');
+const entryPriceInput = document.getElementById('entry-price');
+const normalPriceInput = document.getElementById('normal-price');
+
+function getRows(W) {
+  if (W >= 1093) return { rows: 8, label: '8 排 (4 組背對背)' };
+  if (W >= 911)  return { rows: 6, label: '6 排 (左 + 雙背對背 + 右)' };
+  if (W >= 548)  return { rows: 4, label: '4 排背對背 (左 + 中背對背 + 右)' };
+  if (W >= 366)  return { rows: 2, label: '2 排 (面對面或靠兩牆)' };
+  if (W >= 184)  return { rows: 1, label: '1 排 (靠單牆)' };
+  return { rows: 0, label: '寬度不足' };
+}
+
+function calcProgressive(kwh, isSummer) {
+  const rates = isSummer
+    ? [[330, 2.71], [370, 3.76], [800, 4.56], [1500, 7.18], [Infinity, 7.53]]
+    : [[330, 2.28], [370, 3.10], [800, 3.71], [1500, 5.66], [Infinity, 5.93]];
+  let remain = kwh;
+  let fee = 0;
+  for (const [limit, rate] of rates) {
+    const used = Math.min(remain, limit);
+    fee += used * rate;
+    remain -= used;
+    if (remain <= 0) break;
+  }
+  return fee;
+}
+
+function calcTimeOfUse(kwh, isSummer) {
+  const peakRatio = 0.446;
+  const offPeakRatio = 0.554;
+  const peakKwh = kwh * peakRatio;
+  const offPeakKwh = kwh * offPeakRatio;
+  const peakRate = isSummer ? 4.57 : 4.35;
+  const offPeakRate = isSummer ? 1.80 : 1.73;
+  const baseFee = 75;
+  let fee = baseFee + peakKwh * peakRate + offPeakKwh * offPeakRate;
+  if (kwh > 2000) {
+    fee += (kwh - 2000) * 0.96;
+  }
+  return fee;
+}
+
+function drawLayout(W, D, rows, perRow) {
+  const svg = document.getElementById('layout-svg');
+
+  if (rows === 0 || perRow === 0) {
+    svg.innerHTML = '<text x="300" y="300" text-anchor="middle" fill="#888780" font-size="14" font-family="inherit">尺寸不足無法配置</text>';
+    svg.setAttribute('viewBox', '0 0 600 600');
+    return;
+  }
+
+  const aspectRatio = D / W;
+  const svgW = 600;
+  const svgH = Math.min(800, Math.max(400, svgW * aspectRatio));
+
+  svg.setAttribute('viewBox', `0 0 ${svgW} ${svgH}`);
+
+  const padding = 30;
+  const drawW = svgW - padding * 2;
+  const drawH = svgH - padding * 2 - 50;
+
+  const scaleX = drawW / W;
+  const scaleY = drawH / D;
+
+  const wallGap = 5;
+  const machineDepth = 87;
+  const walkway = 90;
+  const backGap = 10;
+  const machineWidth = 80.2;
+
+  let elements = [];
+
+  elements.push(`<rect x="${padding}" y="${padding}" width="${drawW}" height="${drawH}" fill="#FAFAF8" stroke="#444441" stroke-width="2"/>`);
+
+  let rowPositions = [];
+
+  if (rows === 1) {
+    rowPositions = [{ x: (W - machineDepth) / 2 }];
+  } else if (rows === 2) {
+    rowPositions = [
+      { x: wallGap },
+      { x: W - wallGap - machineDepth }
+    ];
+  } else {
+    const backToBackPairs = (rows - 2) / 2;
+    const totalMachineWidth = 2 * machineDepth + backToBackPairs * (2 * machineDepth + backGap);
+    const totalWalkwayCount = backToBackPairs + 1;
+    const remainingWidth = W - 2 * wallGap - totalMachineWidth;
+    const actualWalkway = Math.max(walkway, remainingWidth / totalWalkwayCount);
+
+    let currentX = wallGap;
+    rowPositions.push({ x: currentX });
+    currentX += machineDepth + actualWalkway;
+
+    for (let p = 0; p < backToBackPairs; p++) {
+      rowPositions.push({ x: currentX });
+      currentX += machineDepth + backGap;
+      rowPositions.push({ x: currentX });
+      currentX += machineDepth + actualWalkway;
+    }
+
+    rowPositions.push({ x: currentX });
+  }
+
+  const startY = 25;
+
+  for (let r = 0; r < rowPositions.length; r++) {
+    const pos = rowPositions[r];
+    const sx = padding + pos.x * scaleX;
+    const w = machineDepth * scaleX;
+
+    for (let i = 0; i < perRow; i++) {
+      const my = startY + i * machineWidth;
+      const sy = padding + my * scaleY;
+      const h = machineWidth * scaleY;
+
+      const isEntry = (i === 0);
+      const fill = isEntry ? '#E6F1FB' : '#F1EFE8';
+      const stroke = isEntry ? '#185FA5' : '#5F5E5A';
+      const textColor = isEntry ? '#0C447C' : '#444441';
+
+      const rowLabels = ['L', 'A', 'B', 'C', 'D', 'E', 'F', 'G'];
+      const rowLabel = rows === 4 ? ['L', 'A', 'B', 'R'][r]
+                     : rows === 2 ? ['L', 'R'][r]
+                     : rows === 6 ? ['L', 'A', 'B', 'C', 'D', 'R'][r]
+                     : rows === 8 ? ['L', 'A', 'B', 'C', 'D', 'E', 'F', 'R'][r]
+                     : rowLabels[r];
+      const label = `${rowLabel}${i + 1}`;
+
+      elements.push(`<rect x="${sx}" y="${sy}" width="${w}" height="${h - 2}" rx="2" fill="${fill}" stroke="${stroke}" stroke-width="0.5"/>`);
+
+      const fontSize = Math.min(13, w * 0.18);
+      elements.push(`<text x="${sx + w/2}" y="${sy + h/2 - 4}" text-anchor="middle" fill="${textColor}" font-size="${fontSize}" font-weight="500" font-family="inherit">${label}</text>`);
+
+      if (isEntry && w > 40) {
+        elements.push(`<text x="${sx + w/2}" y="${sy + h/2 + 10}" text-anchor="middle" fill="${textColor}" font-size="${Math.min(9, w * 0.13)}" font-family="inherit">入口</text>`);
+      }
+    }
+  }
+
+  const lastMachineY = startY + perRow * machineWidth + 15;
+  const doorY = padding + drawH;
+
+  const doorWidth = Math.min(W * 0.35, 200);
+  const doorX = (W - doorWidth) / 2;
+  elements.push(`<line x1="${padding + doorX * scaleX}" y1="${doorY}" x2="${padding + (doorX + doorWidth) * scaleX}" y2="${doorY}" stroke="#A32D2D" stroke-width="3"/>`);
+  elements.push(`<text x="${padding + W/2 * scaleX}" y="${doorY + 25}" text-anchor="middle" fill="#A32D2D" font-size="13" font-weight="500" font-family="inherit">大門</text>`);
+
+  elements.push(`<text x="${padding + drawW / 2}" y="${padding - 8}" text-anchor="middle" fill="#5F5E5A" font-size="11" font-family="inherit">${W} cm</text>`);
+
+  elements.push(`<text x="${padding - 8}" y="${padding + drawH / 2}" text-anchor="middle" fill="#5F5E5A" font-size="11" font-family="inherit" transform="rotate(-90 ${padding - 8} ${padding + drawH / 2})">${D} cm</text>`);
+
+  svg.innerHTML = elements.join('');
+}
+
+function calc() {
+  const W = parseInt(wSlider.value);
+  const D = parseInt(dSlider.value);
+  const entryPrice = parseInt(entryPriceInput.value) || 0;
+  const normalPrice = parseInt(normalPriceInput.value) || 0;
+
+  document.getElementById('w-value').textContent = W + ' cm';
+  document.getElementById('d-value').textContent = D + ' cm';
+
+  const sqm = (W * D) / 10000;
+  const ping = sqm / 3.305785;
+  document.getElementById('ping').textContent = ping.toFixed(1) + ' 坪';
+
+  const rowInfo = getRows(W);
+  const perRow = Math.max(0, Math.floor((D - 85) / 80.2));
+  const total = rowInfo.rows * perRow;
+
+  document.getElementById('rows').textContent = rowInfo.rows + ' 排';
+  document.getElementById('per-row').textContent = perRow + ' 台';
+  document.getElementById('total').textContent = total + ' 台';
+
+  const status = document.getElementById('status');
+  if (rowInfo.rows === 0 || perRow === 0) {
+    status.classList.add('warning');
+  } else {
+    status.classList.remove('warning');
+  }
+  status.textContent = rowInfo.label;
+
+  const entryCount = Math.min(rowInfo.rows, total);
+  const normalCount = Math.max(0, total - entryCount);
+  const entryRev = entryCount * entryPrice;
+  const normalRev = normalCount * normalPrice;
+  const totalRev = entryRev + normalRev;
+
+  document.getElementById('entry-label').textContent = `入口優位 ${entryCount} 台 × ${entryPrice.toLocaleString()}`;
+  document.getElementById('normal-label').textContent = `一般 ${normalCount} 台 × ${normalPrice.toLocaleString()}`;
+  document.getElementById('entry-revenue').textContent = 'NT$ ' + entryRev.toLocaleString();
+  document.getElementById('normal-revenue').textContent = 'NT$ ' + normalRev.toLocaleString();
+  document.getElementById('total-revenue').textContent = 'NT$ ' + totalRev.toLocaleString();
+
+  document.querySelectorAll('.preset-buttons button').forEach(btn => {
+    const preset = btn.dataset.preset;
+    if (preset === W + 'x' + D) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  });
+
+  const watts = parseInt(wattsSlider.value);
+  document.getElementById('watts-value').textContent = watts + ' W';
+
+  const acCount = parseInt(acCountSlider.value);
+  const acWatts = parseInt(acWattsSlider.value);
+  const acSummerH = parseInt(acSummerHoursSlider.value);
+  const acMidH = parseInt(acMidHoursSlider.value);
+  const acWinterH = parseInt(acWinterHoursSlider.value);
+
+  document.getElementById('ac-count-value').textContent = acCount + ' 台';
+  document.getElementById('ac-watts-value').textContent = acWatts + ' W';
+  document.getElementById('ac-summer-hours-value').textContent = acSummerH + ' h';
+  document.getElementById('ac-mid-hours-value').textContent = acMidH + ' h';
+  document.getElementById('ac-winter-hours-value').textContent = acWinterH + ' h';
+
+  const kwhMachines = total * watts * 24 * 30 / 1000;
+  const kwhAcSummer = acCount * acWatts * acSummerH * 30 / 1000;
+  const kwhAcMid = acCount * acWatts * acMidH * 30 / 1000;
+  const kwhAcWinter = acCount * acWatts * acWinterH * 30 / 1000;
+
+  const kwhSummerTotal = kwhMachines + kwhAcSummer;
+  const kwhMidTotal = kwhMachines + kwhAcMid;
+  const kwhWinterTotal = kwhMachines + kwhAcWinter;
+
+  document.getElementById('kwh-machines').textContent = Math.round(kwhMachines).toLocaleString();
+  document.getElementById('kwh-ac-summer').textContent = Math.round(kwhAcSummer).toLocaleString();
+  document.getElementById('kwh-summer-total').textContent = Math.round(kwhSummerTotal).toLocaleString();
+
+  const summerProg = calcProgressive(kwhSummerTotal, true);
+  const midProg = calcProgressive(kwhMidTotal, false);
+  const winterProg = calcProgressive(kwhWinterTotal, false);
+  const summerTime = calcTimeOfUse(kwhSummerTotal, true);
+  const midTime = calcTimeOfUse(kwhMidTotal, false);
+  const winterTime = calcTimeOfUse(kwhWinterTotal, false);
+
+  const annualProg = summerProg * 4 + midProg * 2 + winterProg * 6;
+  const annualTime = summerTime * 4 + midTime * 2 + winterTime * 6;
+  const annualSaving = annualProg - annualTime;
+  const monthlyAvg = annualTime / 12;
+
+  document.getElementById('annual-progressive').textContent = 'NT$ ' + Math.round(annualProg).toLocaleString();
+  document.getElementById('annual-time').textContent = 'NT$ ' + Math.round(annualTime).toLocaleString();
+  document.getElementById('annual-saving').textContent = 'NT$ ' + Math.round(annualSaving).toLocaleString();
+  document.getElementById('monthly-summer').textContent = 'NT$ ' + Math.round(summerTime).toLocaleString();
+  document.getElementById('monthly-mid').textContent = 'NT$ ' + Math.round(midTime).toLocaleString();
+  document.getElementById('monthly-winter').textContent = 'NT$ ' + Math.round(winterTime).toLocaleString();
+  document.getElementById('monthly-avg').textContent = 'NT$ ' + Math.round(monthlyAvg).toLocaleString();
+
+  drawLayout(W, D, rowInfo.rows, perRow);
+}
+
+function setPreset(w, d) {
+  wSlider.value = w;
+  dSlider.value = d;
+  calc();
+}
+
+wSlider.oninput = calc;
+dSlider.oninput = calc;
+wattsSlider.oninput = calc;
+acCountSlider.oninput = calc;
+acWattsSlider.oninput = calc;
+acSummerHoursSlider.oninput = calc;
+acMidHoursSlider.oninput = calc;
+acWinterHoursSlider.oninput = calc;
+entryPriceInput.oninput = calc;
+normalPriceInput.oninput = calc;
+calc();
+</script>
+
+</body>
+</html>
