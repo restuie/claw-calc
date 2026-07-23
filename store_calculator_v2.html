@@ -408,7 +408,7 @@ body {
         <p class="price-input-label">入口優位 (每排第 1 台)</p>
         <div class="price-input-wrapper">
           <span class="price-input-prefix">NT$</span>
-          <input type="number" id="entry-price" value="6300" min="0" step="100">
+          <input type="number" id="entry-price" value="2500" min="0" step="100">
           <span class="price-input-suffix">/月</span>
         </div>
       </div>
@@ -416,9 +416,76 @@ body {
         <p class="price-input-label">一般位置</p>
         <div class="price-input-wrapper">
           <span class="price-input-prefix">NT$</span>
-          <input type="number" id="normal-price" value="5800" min="0" step="100">
+          <input type="number" id="normal-price" value="2500" min="0" step="100">
           <span class="price-input-suffix">/月</span>
         </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="card">
+    <p class="section-title">投資成本與回本設定</p>
+
+    <div class="price-input-row">
+      <div class="price-input-group">
+        <p class="price-input-label">每台娃娃機成本</p>
+        <div class="price-input-wrapper">
+          <span class="price-input-prefix">NT$</span>
+          <input type="number" id="machine-cost" value="10000" min="0" step="1000">
+          <span class="price-input-suffix">/台</span>
+        </div>
+      </div>
+      <div class="price-input-group">
+        <p class="price-input-label">店面月租</p>
+        <div class="price-input-wrapper">
+          <span class="price-input-prefix">NT$</span>
+          <input type="number" id="store-rent" value="16000" min="0" step="1000">
+          <span class="price-input-suffix">/月</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="price-input-row">
+      <div class="price-input-group">
+        <p class="price-input-label">每台冷氣成本</p>
+        <div class="price-input-wrapper">
+          <span class="price-input-prefix">NT$</span>
+          <input type="number" id="ac-cost" value="16000" min="0" step="1000">
+          <span class="price-input-suffix">/台</span>
+        </div>
+      </div>
+      <div class="price-input-group">
+        <p class="price-input-label">冷氣成本說明</p>
+        <div class="price-input-wrapper">
+          <input type="text" value="依冷氣台數自動計算" readonly aria-label="冷氣成本說明">
+        </div>
+      </div>
+    </div>
+
+    <div class="price-input-row">
+      <div class="price-input-group">
+        <p class="price-input-label">其他初期成本</p>
+        <div class="price-input-wrapper">
+          <span class="price-input-prefix">NT$</span>
+          <input type="number" id="other-initial-cost" value="0" min="0" step="1000">
+        </div>
+      </div>
+      <div class="price-input-group">
+        <p class="price-input-label">其他每月支出</p>
+        <div class="price-input-wrapper">
+          <span class="price-input-prefix">NT$</span>
+          <input type="number" id="other-monthly-cost" value="0" min="0" step="500">
+          <span class="price-input-suffix">/月</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="slider-group" style="margin-top: 12px; margin-bottom: 0;">
+      <p class="slider-label">預估出租率</p>
+      <div class="slider-row">
+        <input type="range" id="occupancy-slider" min="0" max="100" value="100" step="5">
+        <span class="slider-value" id="occupancy-value">100%</span>
       </div>
     </div>
   </div>
@@ -542,42 +609,73 @@ body {
     </div>
 
     <div class="revenue-card">
-      <p class="revenue-title">兩種電價方案年費比較（含冷氣）</p>
+      <p class="revenue-title">兩種電價方案平均月電費比較（含冷氣）</p>
       <div class="revenue-grid">
         <div class="revenue-item">
-          <p>累進電價（預設）</p>
-          <p id="annual-progressive">NT$ --</p>
+          <p>累進電價（月平均）</p>
+          <p id="monthly-progressive">NT$ --</p>
         </div>
         <div class="revenue-item">
-          <p>時間電價（建議）</p>
-          <p id="annual-time" style="color: #185FA5;">NT$ --</p>
+          <p>時間電價（月平均）</p>
+          <p id="monthly-time" style="color: #185FA5;">NT$ --</p>
         </div>
       </div>
       <div class="revenue-total">
-        <p class="revenue-total-label">時間電價年省金額</p>
-        <p class="revenue-total-value" id="annual-saving">NT$ --</p>
+        <p class="revenue-total-label">時間電價每月平均節省</p>
+        <p class="revenue-total-value" id="monthly-saving">NT$ --</p>
       </div>
     </div>
 
-    <div class="revenue-card" style="margin-top: 12px;">
-      <p class="revenue-title">月電費明細（時間電價）</p>
-      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; font-size: 13px;">
+    
+  </div>
+
+
+  <div class="card">
+    <p class="section-title">投資與回本試算</p>
+    <div class="metrics">
+      <div class="metric">
+        <p class="metric-label">娃娃機台數</p>
+        <p class="metric-value" id="investment-machine-count">24 台</p>
+      </div>
+      <div class="metric">
+        <p class="metric-label">機台總成本</p>
+        <p class="metric-value" id="machine-investment">NT$ 240,000</p>
+      </div>
+      <div class="metric">
+        <p class="metric-label">冷氣總成本</p>
+        <p class="metric-value" id="ac-investment">NT$ 32,000</p>
+      </div>
+      <div class="metric">
+        <p class="metric-label">每月淨收入</p>
+        <p class="metric-value" id="monthly-profit">NT$ --</p>
+      </div>
+      <div class="metric">
+        <p class="metric-label">預估回本時間</p>
+        <p class="metric-value highlight" id="payback-months">-- 個月</p>
+      </div>
+    </div>
+    <div class="revenue-card">
+      <div class="revenue-grid">
         <div class="revenue-item">
-          <p>夏月（6-9 月）</p>
-          <p id="monthly-summer">NT$ --</p>
+          <p>總初期投資</p>
+          <p id="total-investment">NT$ --</p>
         </div>
         <div class="revenue-item">
-          <p>過渡（5、10 月）</p>
-          <p id="monthly-mid">NT$ --</p>
+          <p>出租率後月收入</p>
+          <p id="occupied-revenue">NT$ --</p>
         </div>
         <div class="revenue-item">
-          <p>冬季（11-4 月）</p>
-          <p id="monthly-winter">NT$ --</p>
+          <p>平均月電費（時間電價）</p>
+          <p id="payback-electricity">NT$ --</p>
+        </div>
+        <div class="revenue-item">
+          <p>每月固定支出</p>
+          <p id="monthly-fixed-cost">NT$ --</p>
         </div>
       </div>
       <div class="revenue-total">
-        <p class="revenue-total-label">全年平均月電費</p>
-        <p class="revenue-total-value" id="monthly-avg">NT$ --</p>
+        <p class="revenue-total-label">計算方式：總初期投資 ÷ 每月淨收入</p>
+        <p class="revenue-total-value" id="payback-status">等待計算</p>
       </div>
     </div>
   </div>
@@ -599,13 +697,13 @@ body {
       <p><strong>入口優位：</strong>每排第 1 台（靠近大門）</p>
       <p style="margin-top: 8px;"><strong>電費計算（24h 營業）：</strong></p>
       <p>月用電 = 台數 × 瓦數 × 24h × 30 ÷ 1000</p>
-      <p>累進電價：2.71-7.18 元/度（依級距累進）</p>
-      <p>時間電價：尖峰 4.57 + 離峰 1.80 元/度 + 75 元基本費</p>
+      <p>累進電價：夏月 2.71–7.43、非夏月 2.28–5.83 元/度（依級距累進）</p>
+      <p>二段式時間電價：夏月尖峰 5.16／離峰 2.06；非夏月尖峰 4.93／離峰 1.99 元/度 + 75 元基本費</p>
       <p>時段分佈：尖峰 44.6% / 離峰 55.4%（24h 營業）</p>
     </div>
   </div>
 
-  <p class="footer">v5.1 · 麥香砸摳商行 · 2026/5</p>
+  <p class="footer">v5.4 · 2026 電價更新版 · 麥香砸摳商行 · 2026/7</p>
 </div>
 
 <script>
@@ -619,6 +717,12 @@ const acMidHoursSlider = document.getElementById('ac-mid-hours-slider');
 const acWinterHoursSlider = document.getElementById('ac-winter-hours-slider');
 const entryPriceInput = document.getElementById('entry-price');
 const normalPriceInput = document.getElementById('normal-price');
+const machineCostInput = document.getElementById('machine-cost');
+const acCostInput = document.getElementById('ac-cost');
+const storeRentInput = document.getElementById('store-rent');
+const otherInitialCostInput = document.getElementById('other-initial-cost');
+const otherMonthlyCostInput = document.getElementById('other-monthly-cost');
+const occupancySlider = document.getElementById('occupancy-slider');
 
 function getRows(W) {
   if (W >= 1093) return { rows: 8, label: '8 排 (4 組背對背)' };
@@ -631,8 +735,8 @@ function getRows(W) {
 
 function calcProgressive(kwh, isSummer) {
   const rates = isSummer
-    ? [[330, 2.71], [370, 3.76], [800, 4.56], [1500, 7.18], [Infinity, 7.53]]
-    : [[330, 2.28], [370, 3.10], [800, 3.71], [1500, 5.66], [Infinity, 5.93]];
+    ? [[330, 2.71], [370, 3.76], [800, 4.46], [1500, 7.08], [Infinity, 7.43]]
+    : [[330, 2.28], [370, 3.10], [800, 3.61], [1500, 5.56], [Infinity, 5.83]];
   let remain = kwh;
   let fee = 0;
   for (const [limit, rate] of rates) {
@@ -649,12 +753,12 @@ function calcTimeOfUse(kwh, isSummer) {
   const offPeakRatio = 0.554;
   const peakKwh = kwh * peakRatio;
   const offPeakKwh = kwh * offPeakRatio;
-  const peakRate = isSummer ? 4.57 : 4.35;
-  const offPeakRate = isSummer ? 1.80 : 1.73;
+  const peakRate = isSummer ? 5.16 : 4.93;
+  const offPeakRate = isSummer ? 2.06 : 1.99;
   const baseFee = 75;
   let fee = baseFee + peakKwh * peakRate + offPeakKwh * offPeakRate;
   if (kwh > 2000) {
-    fee += (kwh - 2000) * 0.96;
+    fee += (kwh - 2000) * 1.04;
   }
   return fee;
 }
@@ -777,6 +881,13 @@ function calc() {
   const D = parseInt(dSlider.value);
   const entryPrice = parseInt(entryPriceInput.value) || 0;
   const normalPrice = parseInt(normalPriceInput.value) || 0;
+  const machineCost = Math.max(0, parseInt(machineCostInput.value) || 0);
+  const acCost = Math.max(0, parseInt(acCostInput.value) || 0);
+  const storeRent = Math.max(0, parseInt(storeRentInput.value) || 0);
+  const otherInitialCost = Math.max(0, parseInt(otherInitialCostInput.value) || 0);
+  const otherMonthlyCost = Math.max(0, parseInt(otherMonthlyCostInput.value) || 0);
+  const occupancyRate = Math.max(0, Math.min(100, parseInt(occupancySlider.value) || 0)) / 100;
+  document.getElementById('occupancy-value').textContent = Math.round(occupancyRate * 100) + '%';
 
   document.getElementById('w-value').textContent = W + ' cm';
   document.getElementById('d-value').textContent = D + ' cm';
@@ -860,15 +971,43 @@ function calc() {
   const annualProg = summerProg * 4 + midProg * 2 + winterProg * 6;
   const annualTime = summerTime * 4 + midTime * 2 + winterTime * 6;
   const annualSaving = annualProg - annualTime;
+  const monthlyProgressive = annualProg / 12;
   const monthlyAvg = annualTime / 12;
+  const monthlySaving = annualSaving / 12;
 
-  document.getElementById('annual-progressive').textContent = 'NT$ ' + Math.round(annualProg).toLocaleString();
-  document.getElementById('annual-time').textContent = 'NT$ ' + Math.round(annualTime).toLocaleString();
-  document.getElementById('annual-saving').textContent = 'NT$ ' + Math.round(annualSaving).toLocaleString();
-  document.getElementById('monthly-summer').textContent = 'NT$ ' + Math.round(summerTime).toLocaleString();
-  document.getElementById('monthly-mid').textContent = 'NT$ ' + Math.round(midTime).toLocaleString();
-  document.getElementById('monthly-winter').textContent = 'NT$ ' + Math.round(winterTime).toLocaleString();
-  document.getElementById('monthly-avg').textContent = 'NT$ ' + Math.round(monthlyAvg).toLocaleString();
+  document.getElementById('monthly-progressive').textContent = 'NT$ ' + Math.round(monthlyProgressive).toLocaleString();
+  document.getElementById('monthly-time').textContent = 'NT$ ' + Math.round(monthlyAvg).toLocaleString();
+  document.getElementById('monthly-saving').textContent = 'NT$ ' + Math.round(monthlySaving).toLocaleString();
+
+  const machineInvestment = total * machineCost;
+  const acInvestment = acCount * acCost;
+  const totalInvestment = machineInvestment + acInvestment + otherInitialCost;
+  const occupiedRevenue = totalRev * occupancyRate;
+  const monthlyFixedCost = storeRent + otherMonthlyCost;
+  const monthlyProfit = occupiedRevenue - monthlyAvg - monthlyFixedCost;
+  const paybackMonths = monthlyProfit > 0 ? totalInvestment / monthlyProfit : Infinity;
+
+  document.getElementById('investment-machine-count').textContent = total.toLocaleString() + ' 台';
+  document.getElementById('machine-investment').textContent = 'NT$ ' + Math.round(machineInvestment).toLocaleString();
+  document.getElementById('ac-investment').textContent = 'NT$ ' + Math.round(acInvestment).toLocaleString();
+  document.getElementById('total-investment').textContent = 'NT$ ' + Math.round(totalInvestment).toLocaleString();
+  document.getElementById('occupied-revenue').textContent = 'NT$ ' + Math.round(occupiedRevenue).toLocaleString();
+  document.getElementById('payback-electricity').textContent = 'NT$ ' + Math.round(monthlyAvg).toLocaleString();
+  document.getElementById('monthly-fixed-cost').textContent = 'NT$ ' + Math.round(monthlyFixedCost).toLocaleString();
+  document.getElementById('monthly-profit').textContent = 'NT$ ' + Math.round(monthlyProfit).toLocaleString();
+
+  const paybackValue = document.getElementById('payback-months');
+  const paybackStatus = document.getElementById('payback-status');
+  if (totalInvestment <= 0) {
+    paybackValue.textContent = '0 個月';
+    paybackStatus.textContent = '未設定初期投資';
+  } else if (monthlyProfit > 0) {
+    paybackValue.textContent = paybackMonths.toFixed(1) + ' 個月';
+    paybackStatus.textContent = `約 ${paybackMonths.toFixed(1)} 個月回本（${(paybackMonths / 12).toFixed(1)} 年）`;
+  } else {
+    paybackValue.textContent = '無法回本';
+    paybackStatus.textContent = '每月淨收入小於或等於 0，請調整租金、出租率或成本';
+  }
 
   drawLayout(W, D, rowInfo.rows, perRow);
 }
@@ -889,6 +1028,12 @@ acMidHoursSlider.oninput = calc;
 acWinterHoursSlider.oninput = calc;
 entryPriceInput.oninput = calc;
 normalPriceInput.oninput = calc;
+machineCostInput.oninput = calc;
+acCostInput.oninput = calc;
+storeRentInput.oninput = calc;
+otherInitialCostInput.oninput = calc;
+otherMonthlyCostInput.oninput = calc;
+occupancySlider.oninput = calc;
 calc();
 </script>
 
